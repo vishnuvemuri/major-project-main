@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Know About Vitamins</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #121829, #1f2937, #374151);
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            color: #fff;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .search-container {
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            border: 2px solid #121829;
+            border-radius: 30px;
+            outline: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .info-container {
+            margin-top: 30px;
+            padding: 25px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(47, 15, 164, 0.2);
+        }
+        .info-container h2 {
+            color: #09496b;
+            font-size: 2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Vitamin Insights</h1>
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Enter a Vitamin Name..." oninput="searchVitamin()">
+    </div>
+    <div id="info" class="info-container" style="display:none;"></div>
+</body>
+</html>
+
+    
+    <script>
+        const vitaminData = {
+    "Vitamin A": {
+        "why_needed": "Vitamin A is essential for maintaining good vision, particularly night vision. It supports immune system function, helping to defend against illnesses and infections. It plays a key role in maintaining healthy skin and mucous membranes. It's important for growth and development, especially in children.",
+        "deficiency_effects": "Night blindness: Difficulty seeing in low light or darkness. Dry eyes: Can lead to a condition called xerophthalmia, which can damage the cornea and result in vision loss. Frequent infections: A weakened immune system increases susceptibility to infections. Dry, rough skin: A lack of Vitamin A can cause skin to become dry and flaky. Growth issues: In children, a deficiency can lead to slowed growth and development."
+    },
+    "Vitamin B1": {
+        "why_needed": "Thiamine is vital for converting carbohydrates into energy. It supports proper nerve function and muscle contraction. It plays a role in the metabolism of glucose, essential for brain function.",
+        "deficiency_effects": "Fatigue and weakness: Low energy levels due to impaired carbohydrate metabolism. Beriberi: A condition that affects the cardiovascular and nervous systems. Symptoms can include muscle weakness, pain, irregular heart rate, and difficulty breathing. Wernicke-Korsakoff syndrome: A severe neurological disorder, often related to alcoholism, that can cause confusion, memory loss, and lack of muscle coordination. Poor appetite: Reduced desire to eat, leading to nutritional deficiencies."
+    },
+    "Vitamin B2": {
+        "why_needed": "Riboflavin is important for energy production and cellular function. It supports skin and eye health and helps break down carbohydrates, proteins, and fats.",
+        "deficiency_effects": "Cracked lips: Painful cracks at the corners of the mouth. Skin disorders: Dry, scaly skin. Eye issues: Sensitivity to light, itchy eyes, and redness."
+    },
+    "Vitamin B3": {
+        "why_needed": "Niacin helps convert food into energy. It supports brain function, digestion, and skin health.",
+        "deficiency_effects": "Pellagra: Symptoms include diarrhea, dermatitis, dementia, and eventually death if untreated. Fatigue: Lack of energy. Skin inflammation: Red, scaly rashes."
+    },
+    "Vitamin B5": {
+        "why_needed": "Pantothenic acid is necessary for energy production and the synthesis of hormones and neurotransmitters.",
+        "deficiency_effects": "Fatigue: Reduced energy levels. Irritability: Mood changes. Numbness: Tingling sensations in hands and feet."
+    },
+    "Vitamin B6": {
+        "why_needed": "Vitamin B6 is essential for brain development and function. It helps produce neurotransmitters that regulate mood and the sleep cycle.",
+        "deficiency_effects": "Irritability: Mood swings and depression. Anemia: Reduced oxygen in the blood. Weak immune function: Increased susceptibility to infections."
+    },
+    "Vitamin B7": {
+        "why_needed": "Biotin plays a key role in carbohydrate, fat, and protein metabolism. It supports healthy hair, skin, and nails.",
+        "deficiency_effects": "Hair thinning: Hair loss or brittle hair. Skin rash: Especially around the face. Fatigue: Low energy levels."
+    },
+    "Vitamin B12": {
+        "why_needed": "Vitamin B12 is essential for the production of red blood cells, which carry oxygen throughout the body. It supports the health of the nervous system and plays a role in the formation of myelin, which protects nerve fibers. It's important for DNA synthesis and overall cellular function. It helps prevent megaloblastic anemia, which causes fatigue and weakness.",
+        "deficiency_effects": "Fatigue and weakness: Due to reduced red blood cell production. Anemia: Specifically, megaloblastic anemia, which can cause tiredness and pallor. Nerve damage: This can lead to tingling, numbness, or a burning sensation in the hands and feet. Cognitive issues: Memory loss, confusion, and difficulty concentrating. Mood changes: Including depression and irritability."
+    },
+    "Vitamin C": {
+        "why_needed": "Vitamin C is crucial for the growth, development, and repair of all body tissues. It helps in the production of collagen, which is important for skin, cartilage, tendons, ligaments, and blood vessels. It enhances the absorption of iron from plant-based foods. It supports the immune system, helping to protect against infections. It acts as an antioxidant, protecting cells from damage by free radicals.",
+        "deficiency_effects": "Scurvy: A severe deficiency can lead to scurvy, characterized by fatigue, gum disease, and bleeding. Weakened immune system: Increased susceptibility to infections. Poor wound healing: Since collagen synthesis is impaired, wounds may take longer to heal. Dry, splitting hair: A lack of Vitamin C can affect hair health. Joint pain: Due to collagen deficiency in cartilage."
+    },
+    "Vitamin D": {
+        "why_needed": "Vitamin D is essential for calcium absorption in the gut, which is critical for maintaining healthy bones and teeth. It supports immune system function, helping to protect against infections and diseases. It also plays a role in reducing inflammation and modulating cell growth.",
+        "deficiency_effects": "Rickets: In children, severe deficiency can lead to rickets, causing soft and weak bones. Osteomalacia: In adults, a deficiency can result in osteomalacia, leading to bone pain and muscle weakness. Increased risk of fractures: Poor bone density can increase the risk of fractures. Weakened immune system: Greater susceptibility to infections and illnesses. Mood changes: Vitamin D deficiency has been linked to mood disorders such as depression."
+    },
+    "Vitamin E": {
+        "why_needed": "Vitamin E is an antioxidant that helps protect cells from oxidative stress. It supports immune function and skin health.",
+        "deficiency_effects": "Nerve damage: Tingling and weakness in muscles. Vision problems: Difficulty seeing in low light. Weak immune response: Increased infections."
+    },
+    "Vitamin K": {
+        "why_needed": "Vitamin K is essential for blood clotting and bone health.",
+        "deficiency_effects": "Excessive bleeding: Difficulty clotting wounds. Bone weakness: Increased fracture risk."
+    }
+};
+
+        function searchVitamin() {
+            let query = document.getElementById("search").value.trim();
+            let infoBox = document.getElementById("info");
+
+            if (query in vitaminData) {
+                infoBox.style.display = "block";
+                infoBox.innerHTML = `
+                    <h2>${query}</h2>
+                    <p><strong>Why Needed:</strong> ${vitaminData[query]["why_needed"]}</p>
+                    <p><strong>Deficiency Effects:</strong> ${vitaminData[query]["deficiency_effects"]}</p>
+                `;
+            } else {
+                infoBox.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

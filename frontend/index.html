@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthy Food Vitamin Chart</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: url("{{ url_for('static', filename='vitamins.jpg') }}") no-repeat center center fixed; /* Background Image */
+            background-size: cover; /* Ensures the image covers the whole screen */
+            color: #f0f0f0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(30, 37, 55, 0.9); /* Slight Transparency */
+            padding: 15px 30px;
+        }
+
+        nav .title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #66ccff; /* Light Blue Accent */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Text Shadow for Depth */
+        }
+
+        nav .links {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav .links a {
+            text-decoration: none;
+            color: #f0f0f0;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        nav .links a:hover {
+            color: #66ccff; /* Light Blue Hover Effect */
+            text-shadow: 0px 0px 8px #66ccff;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7); /* Darken for text readability */
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 800px;
+            margin: 50px auto;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5); /* Enhanced Box Shadow */
+        }
+
+        .container h1 {
+            font-size: 30px;
+            color: #ffffff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Text Shadow for Depth */
+        }
+
+        .container p {
+            font-size: 18px;
+            color: #d4d4d4; /* Light Grey for readability */
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #66ccff;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .button:hover {
+            background-color: #5599e6;
+            box-shadow: 0px 0px 10px #66ccff;
+        }
+
+        .about-section, .features-section {
+            background: rgba(0, 0, 0, 0.7); /* Darken for text readability */
+            padding: 30px;
+            margin: 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slightly Enhanced Box Shadow */
+        }
+
+        .about-section h2, .features-section h2 {
+            font-size: 26px;
+            margin-bottom: 15px;
+            color: #66ccff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4); /* Text Shadow for Depth */
+        }
+
+        .about-section p, .features-section ul {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #d4d4d4;
+        }
+
+        .features-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features-section li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="title">Healthy Food Vitamin Chart</div>
+        <div class="links">
+            <a href="#about">About</a>
+            <a href="#features">Features</a>
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('signup') }}">Signup</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Healthy Food Vitamin Chart</h1>
+        <p>Revolutionize the detection and management of vitamin deficiencies, explore the essential vitamins in your daily food for a balanced and healthy life.</p>
+        <a href="{{ url_for('get_started') }}" class="button">Get Started</a>
+    </div>
+
+    <div id="about" class="about-section">
+        <h2>About Our Vitamin Deficiency Detection App</h2>
+        <p>Our app is designed to help you identify and manage vitamin deficiencies effectively. With cutting-edge technology, you can upload images for analysis, log symptoms, and get personalized food recommendations. The app also offers insights into dermatologist findings, a chatbot for health-related queries, and detailed documentation on deficiencies. Embark on your journey toward a healthier life today!</p>
+    </div>
+
+    <div id="features" class="features-section">
+        <h2>Features</h2>
+        <ul>
+            <li>1. Detection from images</li>
+            <li>2. Detection from symptoms</li>
+            <li>3. Curing food recommendations</li>
+            <li>4. Doctor Locator</li>
+            <li>5. Healthbot assistance</li>
+            <li>6. Documentation and details of deficiencies</li>
+        </ul>
+    </div>
+</body>
+</html>

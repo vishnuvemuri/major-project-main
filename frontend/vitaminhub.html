@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitabot</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #121829, #1f2937, #374151);
+            color: #f0f0f0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+            background: #1e293b;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .category-btn, .question-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 18px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .category-btn { background-color: #2563eb; color: white; }
+        .question-btn { background-color: #10b981; color: white; }
+        .category-btn:hover, .question-btn:hover { opacity: 0.8; }
+        .answer {
+            display: none;
+            background: #f0f0f0;
+            color: #121829;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 5px;
+        }
+        h2 {
+            color: #fff;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        button.back-btn {
+            background-color: #e11d48;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="home">
+        <h2>Vitamin Hub</h2>
+        <div id="categories"></div>
+    </div>
+    
+    <div class="container" id="questions-page" style="display: none;">
+        <button class="back-btn" onclick="goBack()">Back</button>
+        <h2 id="category-title"></h2>
+        <div id="questions"></div>
+    </div>
+    
+    <script>
+        const data = {
+            "Vitamin Essentials": [
+                { "q": "Which vitamin is essential for vision, immune function, and skin health and is fat-soluble?", "a": "Vitamin A" },
+                { "q": "What is the primary function of vitamin A in the body?", "a": "Supports vision, immune function, and cell growth." },
+                { "q": "Which vitamin acts as an antioxidant, helping to protect cells from damage?", "a": "Vitamin E" },
+                { "q": "Which vitamin is known as the 'sunshine vitamin' and why?", "a": "Vitamin D, because the body can synthesize it when exposed to sunlight." },
+                { "q": "How does vitamin E act as an antioxidant?", "a": "Vitamin E protects cells from damage by neutralizing free radicals." },
+                { "q": "Which foods are rich in vitamin K?", "a": "Green leafy vegetables, broccoli, and Brussels sprouts." },
+                { "q": "What is the role of vitamin C in collagen synthesis and immune function?", "a": "Vitamin C is needed for collagen production, wound healing, and immune system support." },
+                { "q": "What is the role of vitamin B2 (riboflavin) in energy metabolism?", "a": "Vitamin B2 helps convert food into energy." },
+                { "q": "Which vitamins are fat-soluble?", "a": "Vitamins A, D, E, and K." },
+                { "q": "What are the two main categories of vitamins based on their solubility?", "a": "Fat-soluble vitamins and water-soluble vitamins." },
+                { "q": "Which vitamins are water-soluble?", "a": "Vitamin C and all the B vitamins." },
+                { "q": "What role does Vitamin D play in bone health?", "a": "Vitamin D helps the body absorb calcium, which is crucial for bone strength and growth." },
+                { "q": "Which vitamin is critical for the production of red blood cells?", "a": "Vitamin B12 is crucial for red blood cell production and maintaining proper nerve function." },
+                { "q": "What is the function of Vitamin B3 (Niacin) in cellular health?", "a": "Vitamin B3 plays a key role in the metabolism of food into energy and maintaining healthy skin, nerves, and digestion." },
+                { "q": "How does Vitamin B12 (Cobalamin) support nerve health?", "a": "Vitamin B12 supports the production of myelin, a protective layer around nerve fibers, promoting healthy nerve function." },
+                { "q": "What does Vitamin B9 (Folate) do in DNA synthesis and cell division?", "a": "Vitamin B9 is vital for DNA synthesis and cell division, making it particularly important during pregnancy for fetal development." },
+                { "q": "What is the function of vitamin B6 (pyridoxine) in amino acid metabolism?", "a": "Vitamin B6 helps the body process amino acids, the building blocks of proteins." },
+                { "q": "What foods are rich in Vitamin A, and why is it important for vision?", "a": "Foods rich in Vitamin A include carrots, sweet potatoes, and spinach. Vitamin A is important for maintaining good vision, especially in low light." },
+                { "q": "How does Vitamin B5 (Pantothenic Acid) support the adrenal glands?", "a": "Vitamin B5 is involved in synthesizing coenzyme A, which supports energy production and helps manage stress by supporting the adrenal glands." },
+                { "q": "What is the role of Vitamin B1 (Thiamine) in metabolism?", "a": "Vitamin B1 helps convert carbohydrates into energy and is essential for nerve function." }
+                ],
+            "Deficiency Symptoms": [
+                { "q": "What are common symptoms of vitamin deficiencies?", "a": "Fatigue, weakness, dizziness, brittle hair and nails, poor wound healing, and weakened immunity." },
+                { "q": "Which vitamin deficiency is most commonly associated with fatigue and weakness?", "a": "Vitamin B12 and iron deficiencies." },
+                { "q": "What are signs of a severe vitamin deficiency?", "a": "Nerve damage, impaired vision, extreme fatigue, and severe skin conditions." },
+                { "q": "What are the common symptoms of vitamin A deficiency?", "a": "Night blindness, dry eyes, corneal damage, impaired immune function, and increased susceptibility to infections." },
+                { "q": "Why is it important to see a healthcare professional if you suspect a vitamin deficiency?", "a": "To get a proper diagnosis, determine the underlying cause, and receive appropriate treatment. Self-treating can be dangerous." },
+                { "q": "How does vitamin B2 (riboflavin) deficiency present itself?", "a": "Sore throat, cracked lips, inflammation of the tongue, and skin rashes." },
+                { "q": "What are the symptoms of vitamin B3 (niacin) deficiency?", "a": "Pellagra: Dermatitis, diarrhea, and dementia." },
+                { "q": "What are the signs and symptoms of vitamin B5 (pantothenic acid) deficiency?", "a": "This is rare, but may include fatigue, numbness, tingling, and burning sensations." },
+                { "q": "How does vitamin B6 (pyridoxine) deficiency manifest?", "a": "Anemia, skin rashes, seizures, and depression." },
+                { "q": "What are the common symptoms of vitamin C deficiency?", "a": "Scurvy: Fatigue, weakness, bleeding gums, easy bruising, and impaired wound healing." },
+                { "q": "What cognitive symptoms are associated with vitamin B1 (thiamine) deficiency?", "a": "Confusion, memory loss, and difficulty concentrating (common in beriberi and Wernicke-Korsakoff syndrome)." },
+                { "q": "What is a common symptom of vitamin E deficiency?", "a": "Muscle weakness and vision problems." },
+                { "q": "How does vitamin D deficiency manifest in adults and children?", "a": "Adults: Bone pain, muscle weakness, fatigue, and increased risk of fractures. Children: Rickets (soft bones), delayed growth, and skeletal deformities." },
+                { "q": "What are the symptoms of vitamin K deficiency?", "a": "Easy bruising, prolonged bleeding, and impaired blood clotting." },
+                { "q": "What are the signs and symptoms of vitamin B5 (pantothenic acid) deficiency?", "a": "This is rare, but may include fatigue, numbness, tingling, and burning sensations." },
+                { "q": "Can vitamin deficiencies cause fatigue? If so, which ones?", "a": "Yes, many vitamin deficiencies can cause fatigue, including B vitamins (B12, B9, B6, B2), vitamin D, and vitamin C." },
+                { "q": "Can vitamin deficiencies impact mental health? If so, which ones?", "a": "Yes. Vitamin B12 deficiency can cause cognitive problems and depression. Folate deficiency is also linked to mood disorders." },
+                { "q": "Which vitamin deficiency is linked to irritability and muscle cramps?", "a": "Magnesium and vitamin B6 deficiencies." },
+                { "q": "What is a common symptom of folate (Vitamin B9) deficiency?", "a": "Anemia, fatigue, and neural tube defects in newborns." },
+                { "q": "Which vitamin deficiency is associated with a swollen, red tongue (glossitis)?", "a": "Vitamin B12 and riboflavin (B2) deficiencies." }
+            ],
+            "Nutrient Sources": [
+                { "q": "Which foods are the best sources of vitamins?", "a": "Fruits, vegetables, dairy products, meats, fish, nuts, seeds, and whole grains." },
+                { "q": "Why is it important to get vitamins from food rather than supplements?", "a": "Whole foods provide a balance of vitamins, minerals, fiber, and antioxidants that supplements may not fully replicate." },
+                { "q": "Which foods are the best sources of vitamin A?", "a": "Carrots, sweet potatoes, spinach, liver, and dairy products." },
+                { "q": "What are good food sources of vitamin D?", "a": "Fatty fish (salmon, tuna, mackerel), fortified dairy products, egg yolks, and mushrooms." },
+                { "q": "Which foods provide the most vitamin E?", "a": "Nuts, seeds, spinach, broccoli, and vegetable oils (sunflower and olive oil)." },
+                { "q": "What are the best food sources of vitamin K?", "a": "Leafy greens (kale, spinach, broccoli), Brussels sprouts, and fermented foods like natto." },
+                { "q": "Which foods are high in vitamin C?", "a": "Citrus fruits (oranges, lemons, grapefruits), strawberries, bell peppers, and kiwi." },
+                { "q": "Where can you get vitamin B12 naturally?", "a": "Animal products like meat, eggs, dairy, and fish (salmon, tuna, clams)." },
+                { "q": "What are some plant-based sources of vitamin B12?", "a": "Fortified plant-based milks, nutritional yeast, and fortified cereals." },
+                { "q": "Which foods are rich in folate (vitamin B9)?", "a": "Leafy greens, lentils, beans, avocados, and fortified grains." },
+                { "q": "Which vitamin is best absorbed when consumed with fats?", "a": "Fat-soluble vitamins (A, D, E, K) require healthy fats for better absorption." },
+                { "q": "Which vitamin is best obtained from citrus fruits and vegetables?", "a": "Vitamin C." },
+                { "q": "Which vitamin is found in dairy products and is essential for bone health?", "a": "Vitamin D and calcium." },
+                { "q": "Which nuts are a good source of vitamin E?", "a": "Almonds, sunflower seeds, and hazelnuts." },
+                { "q": "Which vitamin is abundant in whole grains and helps with energy metabolism?", "a": "B vitamins, especially B1 (thiamine), B2 (riboflavin), and B3 (niacin)." },
+                { "q": "Which vitamin is commonly lacking in a vegan diet?", "a": "Vitamin B12." },
+                { "q": "What are good food sources of vitamin B6?", "a": "Bananas, potatoes, chicken, turkey, and fortified cereals." },
+                { "q": "Which vitamin is primarily obtained from sunlight but also found in certain foods?", "a": "Vitamin D." },
+                { "q": "What foods provide a good source of biotin (vitamin B7)?", "a": "Eggs, nuts, seeds, and sweet potatoes." },
+                { "q": "Which vitamin is found in red meat, shellfish, and beans and is important for red blood cell production?", "a": "Iron (though technically a mineral, iron absorption is enhanced by vitamin C)." }
+            ],
+            "Toxicity Risks": [
+                { "q": "What is vitamin toxicity?", "a": "Vitamin toxicity occurs when excessive amounts of a vitamin accumulate in the body, leading to harmful effects." },
+                { "q": "Which type of vitamins are more likely to cause toxicity, fat-soluble or water-soluble?", "a": "Fat-soluble vitamins (A, D, E, K) because they are stored in the body and not easily excreted." },
+                { "q": "Can water-soluble vitamins cause toxicity?", "a": "Yes, but it's less common since they are excreted in urine. However, excessive doses of certain water-soluble vitamins, like B6 and C, can still cause harm." },
+                { "q": "What are common symptoms of vitamin overdose?", "a": "Nausea, vomiting, dizziness, liver damage, nerve problems, and kidney issues, depending on the vitamin." },
+                { "q": "What are the effects of vitamin A toxicity?", "a": "Blurred vision, liver damage, bone pain, dizziness, and birth defects (if taken in excess during pregnancy)." },
+                { "q": "How can too much vitamin D be harmful?", "a": "It can cause hypercalcemia (high blood calcium), leading to kidney damage, nausea, and weakness." },
+                { "q": "What happens if you take too much vitamin E?", "a": "Excess vitamin E can increase the risk of bleeding and hemorrhagic stroke." },
+                { "q": "What are the dangers of vitamin K overdose?", "a": "Excess vitamin K can interfere with blood thinners, leading to abnormal clotting." },
+                { "q": "What happens if you take excessive vitamin C?", "a": "It can cause kidney stones, stomach cramps, and diarrhea." },
+                { "q": "What are the side effects of taking too much vitamin B6?", "a": "Nerve damage, numbness, and difficulty walking if consumed in high doses over time." },
+                { "q": "Can too much vitamin B3 (niacin) be harmful?", "a": "Yes, it can cause liver toxicity, flushing, skin rashes, and gastrointestinal issues." },
+                { "q": "What are the risks of excessive vitamin B9 (folic acid)?", "a": "It can mask a vitamin B12 deficiency, leading to neurological damage if untreated." },
+                { "q": "Is there a toxicity risk for vitamin B12?", "a": "No significant toxicity has been reported, as excess B12 is excreted in urine." },
+                { "q": "Can long-term vitamin D overdose cause permanent damage?", "a": "Yes, prolonged high doses can lead to irreversible kidney damage and calcium buildup in blood vessels." },
+                { "q": "What long-term problems can vitamin A toxicity cause?", "a": "Osteoporosis, liver damage, and permanent vision issues." },
+                { "q": "Which vitamin overdose can lead to an increased risk of heart disease?", "a": "Excess vitamin E and niacin have been linked to increased cardiovascular risks." },
+                { "q": "Can taking high doses of multiple vitamins at once be dangerous?", "a": "Yes, combining excessive amounts of fat-soluble vitamins can increase the risk of toxicity." },
+                { "q": "How can you avoid vitamin toxicity?", "a": "Stick to recommended daily doses, get nutrients primarily from food, and avoid excessive supplementation unless advised by a doctor." },
+                { "q": "What should you do if you suspect vitamin overdose?", "a": "Stop taking the supplement and seek medical advice immediately." },
+                { "q": "Can vitamin toxicity be reversed?", "a": "In some cases, stopping the supplement allows the body to recover, but severe toxicity (e.g., vitamin A or D) may cause lasting damage." }
+            ],
+        
+            "Dermatological Concerns": [
+                { "q": "How can vitamin deficiencies affect the skin?", "a": "Vitamin deficiencies can cause dryness, rashes, acne, discoloration, slow wound healing, and increased sensitivity to sunlight." },
+                { "q": "Which vitamins are essential for healthy skin?", "a": "Vitamins A, C, D, E, K, and B-complex vitamins (especially B2, B3, B5, B6, and B7)." },
+                { "q": "What are the common skin symptoms of vitamin deficiencies?", "a": "Dry skin, inflammation, acne, hyperpigmentation, slow wound healing, and increased bruising." },
+                { "q": "What skin issues can arise from vitamin A deficiency?", "a": "Dry, scaly skin, keratosis pilaris (small bumps on arms and thighs), and increased risk of infections." },
+                { "q": "Which skin problems are linked to vitamin C deficiency?", "a": "Slow wound healing, easy bruising, rough and dry skin, and bleeding gums (scurvy)." },
+                { "q": "How does vitamin D deficiency affect the skin?", "a": "It can lead to dry, flaky skin, increased risk of psoriasis, and slower wound healing." },
+                { "q": "What are the skin symptoms of vitamin E deficiency?", "a": "Increased sensitivity to sun damage, dry skin, and premature aging (wrinkles)." },
+                { "q": "What role does vitamin K play in skin health?", "a": "It helps reduce bruising, dark circles under the eyes, and promotes proper wound healing." },
+                { "q": "Which vitamin deficiency can cause dermatitis and cracked lips?", "a": "Vitamin B2 (riboflavin) deficiency." },
+                { "q": "How does a lack of vitamin B3 (niacin) affect the skin?", "a": "It can cause pellagra, leading to dark, scaly rashes, sun sensitivity, and redness." },
+                { "q": "What skin conditions are linked to vitamin B5 (pantothenic acid) deficiency?", "a": "Acne, dry skin, and increased sensitivity to irritation." },
+                { "q": "How does vitamin B6 deficiency impact the skin?", "a": "It can lead to itchy rashes, cracked corners of the mouth, and seborrheic dermatitis." },
+                { "q": "What skin symptoms are caused by biotin (vitamin B7) deficiency?", "a": "Dry, scaly skin, rashes, and hair loss." },
+                { "q": "Which vitamin deficiency is associated with hyperpigmentation or dark patches on the skin?", "a": "Vitamin B12 deficiency." },
+                { "q": "What deficiency can cause increased sun sensitivity and redness?", "a": "Niacin (B3) deficiency." },
+                { "q": "Which vitamin deficiency can contribute to acne?", "a": "Vitamin A, B5 (pantothenic acid), and zinc deficiencies." },
+                { "q": "What vitamins help with wound healing and scar prevention?", "a": "Vitamins C, A, E, and K." },
+                { "q": "Which vitamin deficiency may cause easy bruising?", "a": "Vitamin C and vitamin K deficiencies." },
+                { "q": "How does a lack of vitamin C affect collagen production?", "a": "It weakens collagen formation, leading to sagging skin, slow wound healing, and wrinkles." },
+                { "q": "Which vitamin is essential for preventing dry, flaky skin?", "a": "Vitamin E and vitamin D." }
+            ],
+
+
+        };
+
+        const categoriesDiv = document.getElementById("categories");
+        const questionsDiv = document.getElementById("questions");
+        const homeDiv = document.getElementById("home");
+        const questionsPage = document.getElementById("questions-page");
+        const categoryTitle = document.getElementById("category-title");
+        let lastOpenedAnswer = null;
+
+        Object.keys(data).forEach(category => {
+            let btn = document.createElement("button");
+            btn.className = "category-btn";
+            btn.innerText = category;
+            btn.onclick = () => displayQuestions(category);
+            categoriesDiv.appendChild(btn);
+        });
+
+        function displayQuestions(category) {
+            homeDiv.style.display = "none";
+            questionsPage.style.display = "block";
+            categoryTitle.innerText = category;
+            questionsDiv.innerHTML = "";
+            data[category].forEach(item => {
+                let qBtn = document.createElement("button");
+                qBtn.className = "question-btn";
+                qBtn.innerText = item.q;
+                let answerDiv = document.createElement("div");
+                answerDiv.className = "answer";
+                answerDiv.innerText = item.a;
+                qBtn.onclick = () => {
+                    if (lastOpenedAnswer && lastOpenedAnswer !== answerDiv) {
+                        lastOpenedAnswer.style.display = "none";
+                    }
+                    answerDiv.style.display = answerDiv.style.display === "none" ? "block" : "none";
+                    lastOpenedAnswer = answerDiv.style.display === "block" ? answerDiv : null;
+                };
+                questionsDiv.appendChild(qBtn);
+                questionsDiv.appendChild(answerDiv);
+            });
+        }
+
+        function goBack() {
+            homeDiv.style.display = "block";
+            questionsPage.style.display = "none";
+        }
+    </script>
+</body>
+</html>
